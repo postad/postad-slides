@@ -136,12 +136,14 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            height: 32px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
         }
 
         .header-controls {
@@ -532,7 +534,7 @@
             }
 
             .logo {
-                font-size: 1.25rem;
+                height: 28px;
             }
 
             .header-btn {
@@ -628,7 +630,7 @@
             }
 
             .logo {
-                font-size: 1.8rem;
+                height: 40px;
             }
 
             .bottom-controls {
@@ -719,7 +721,7 @@
 
     <!-- Header -->
     <header class="header">
-        <div class="logo">PostAd</div>
+        <div class="logo"><img src="logo.jpg" alt="PostAd"></div>
         <div class="header-controls">
             <button class="header-btn" id="btn-autoplay" title="הפעל/עצור אוטומטי (Space)">
                 <span id="autoplay-icon">▶</span>
