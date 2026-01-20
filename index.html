@@ -703,9 +703,119 @@
                 --glass-border: rgba(255, 255, 255, 0.5);
             }
         }
+
+        /* Rotate Screen Overlay */
+        .rotate-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-gradient);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .rotate-icon {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--primary-light);
+            border-radius: 12px;
+            position: relative;
+            animation: rotatePhone 2s ease-in-out infinite;
+        }
+
+        .rotate-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 4px;
+            background: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        .rotate-icon::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--primary-light);
+            border-radius: 50%;
+        }
+
+        @keyframes rotatePhone {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+        }
+
+        .rotate-arrow {
+            font-size: 2.5rem;
+            color: var(--primary-light);
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .rotate-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .rotate-subtext {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .rotate-dismiss {
+            margin-top: 20px;
+            padding: 12px 32px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .rotate-dismiss:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        /* Show rotate overlay only on mobile portrait */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .rotate-overlay:not(.dismissed) {
+                display: flex;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Rotate Screen Overlay (Mobile Portrait) -->
+    <div class="rotate-overlay" id="rotate-overlay">
+        <div class="rotate-icon"></div>
+        <div class="rotate-arrow">↻</div>
+        <div class="rotate-text">לחוויה מיטבית, סובבו את המכשיר</div>
+        <div class="rotate-subtext">המצגת מותאמת לתצוגה אופקית</div>
+        <button class="rotate-dismiss" id="rotate-dismiss">המשך בכל זאת</button>
+    </div>
+
     <!-- Background Effects -->
     <div class="bg-grid"></div>
     <div class="particles">
@@ -1145,6 +1255,20 @@
                     goToSlide(state.totalSlides - 1);
                     break;
             }
+        }
+
+        // Rotate overlay dismiss
+        const rotateOverlay = document.getElementById('rotate-overlay');
+        const rotateDismiss = document.getElementById('rotate-dismiss');
+
+        rotateDismiss.addEventListener('click', () => {
+            rotateOverlay.classList.add('dismissed');
+            sessionStorage.setItem('rotateDismissed', 'true');
+        });
+
+        // Check if previously dismissed in this session
+        if (sessionStorage.getItem('rotateDismissed') === 'true') {
+            rotateOverlay.classList.add('dismissed');
         }
 
         // Start
